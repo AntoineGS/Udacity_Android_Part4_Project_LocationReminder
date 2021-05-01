@@ -1,14 +1,14 @@
 package com.udacity.project4.locationreminders
 
-import android.Manifest
-import android.content.pm.PackageManager
+import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.NavHostFragment
-import com.udacity.project4.R
+import com.udacity.project4.authentication.AuthenticationActivity
+import com.udacity.project4.authentication.AuthenticationViewModel
+import com.udacity.project4.databinding.ActivityRemindersBinding
 import kotlinx.android.synthetic.main.activity_reminders.*
 
 /**
@@ -16,10 +16,23 @@ import kotlinx.android.synthetic.main.activity_reminders.*
  */
 class RemindersActivity : AppCompatActivity() {
 
+    private lateinit var binding: ActivityRemindersBinding
+    private val authViewModel: AuthenticationViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_reminders)
+        binding = ActivityRemindersBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        observeLogin()
+    }
 
+    private fun observeLogin() {
+        authViewModel.userIsAuthenticated.observe(this, {
+            if (!it) {
+                val intent = Intent(this, AuthenticationActivity::class.java)
+                startActivity(intent)
+            }
+        })
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
