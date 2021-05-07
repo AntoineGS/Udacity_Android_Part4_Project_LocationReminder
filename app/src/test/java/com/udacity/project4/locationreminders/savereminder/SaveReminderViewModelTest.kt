@@ -44,7 +44,7 @@ class SaveReminderViewModelTest {
     var instantExecutorRule = InstantTaskExecutorRule()
 
     @Before
-    fun init() {
+    fun setup() {
         fakeDataSource = FakeDataSource()
         context = ApplicationProvider.getApplicationContext()
         saveReminderViewModel = SaveReminderViewModel(context, fakeDataSource)
@@ -58,7 +58,6 @@ class SaveReminderViewModelTest {
         testDispatcher.cleanupTestCoroutines()
     }
 
-    // helper function for tests
     private fun newReminder(): ReminderDataItem {
         return ReminderDataItem(
             "Trash",
