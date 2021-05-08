@@ -8,6 +8,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.udacity.project4.locationreminders.data.FakeDataSource
 import com.udacity.project4.locationreminders.data.dto.ReminderDTO
 import com.udacity.project4.locationreminders.getOrAwaitValue
+import com.udacity.project4.locationreminders.newReminderDTO
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineDispatcher
@@ -44,13 +45,7 @@ class RemindersListViewModelTest {
     fun setup() {
         context = ApplicationProvider.getApplicationContext()
         remindersDTO = mutableListOf(
-            ReminderDTO(
-                "Trash",
-                "Take out the trash",
-                "Home",
-                10.0,
-                5.0
-            )
+            newReminderDTO()
         )
         fakeDataSource = FakeDataSource(remindersDTO)
         remindersListViewModel = RemindersListViewModel(context, fakeDataSource)
