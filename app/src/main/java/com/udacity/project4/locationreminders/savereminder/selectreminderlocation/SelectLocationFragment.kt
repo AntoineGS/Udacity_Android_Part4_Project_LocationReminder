@@ -62,7 +62,6 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
 
     private fun onLocationSelected() {
         map.setOnPoiClickListener { poi ->
-            _viewModel.showToast.postValue(getString(R.string.reminder_saved))
             _viewModel.selectedPOI.postValue(poi)
             _viewModel.latitude.postValue(poi.latLng.latitude)
             _viewModel.longitude.postValue(poi.latLng.longitude)
