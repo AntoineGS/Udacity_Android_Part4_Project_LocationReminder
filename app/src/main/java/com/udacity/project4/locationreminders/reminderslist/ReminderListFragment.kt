@@ -2,7 +2,12 @@ package com.udacity.project4.locationreminders.reminderslist
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import com.firebase.ui.auth.AuthUI
 import com.udacity.project4.R
@@ -75,7 +80,9 @@ class ReminderListFragment : BaseFragment() {
         when (item.itemId) {
             R.id.logout -> {
                 AuthUI.getInstance().signOut(requireContext())
-                requireActivity().startActivity(Intent(requireContext(), AuthenticationActivity::class.java))
+                val intent = Intent(requireContext(), AuthenticationActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                requireActivity().startActivity(intent)
                 requireActivity().finish()
             }
         }
