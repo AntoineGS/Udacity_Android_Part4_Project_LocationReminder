@@ -28,6 +28,7 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
     private lateinit var binding: FragmentSelectLocationBinding
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private lateinit var map: GoogleMap
+    private var marker: Marker? = null
     private var isLocationPermissionGranted: Boolean = false
 
     private val requestLocationPermission = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
@@ -58,16 +59,6 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         binding.mapView.onCreate(savedInstanceState)
         binding.mapView.onResume()
         binding.mapView.getMapAsync(this)
-    }
-
-    private fun onLocationSelected() {
-        map.setOnPoiClickListener { poi ->
-            _viewModel.selectedPOI.postValue(poi)
-            _viewModel.latitude.postValue(poi.latLng.latitude)
-            _viewModel.longitude.postValue(poi.latLng.longitude)
-            _viewModel.reminderSelectedLocationStr.postValue(poi.name)
-            _viewModel.navigationCommand.postValue(NavigationCommand.Back)
-        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -105,12 +96,28 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
 
     private fun setPoiClick() {
         map.setOnPoiClickListener { poi ->
-            val poiMarker = map.addMarker(
+            _viewModel.selectedPOI.postValue(poi)
+            _viewModel.latitude.postValue(poi.latLng.latitude)
+            _viewModel.longitude.postValue(poi.latLng.longitude)
+            _viewModel.reminderSelectedLocationStr.postValue(poi.name)
+            _viewModel.navigationCommand.postValue(NavigationCommand.Back)
+        }
+    }
+
+    private fun onLocationSelected() {
+        map.setOnMapLongClickListener { latLng ->
+            marker?.remove()
+            marker = map.addMarker(
                 MarkerOptions()
-                    .position(poi.latLng)
-                    .title(poi.name)
+                    .position(latLng)
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN))
             )
-            poiMarker.showInfoWindow()
+
+            _viewModel.reminderSelectedLocationStr.postValue(
+                "%.5f, %.5f".format(latLng.latitude, latLng.longitude))
+            _viewModel.latitude.postValue(latLng.latitude)
+            _viewModel.longitude.postValue(latLng.longitude)
+            _viewModel.navigationCommand.postValue(NavigationCommand.Back)
         }
     }
 
