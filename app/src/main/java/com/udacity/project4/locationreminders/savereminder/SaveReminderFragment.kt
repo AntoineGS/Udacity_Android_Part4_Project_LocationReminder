@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import com.google.android.gms.location.Geofence
@@ -106,6 +107,8 @@ class SaveReminderFragment : BaseFragment() {
 
         if (locationPermissionsApproved()) {
             geofencingClient.addGeofences(geofencingRequest, geofencePendingIntent)
+        } else {
+            Toast.makeText(context, R.string.permission_error_geofence, Toast.LENGTH_SHORT).show()
         }
     }
 

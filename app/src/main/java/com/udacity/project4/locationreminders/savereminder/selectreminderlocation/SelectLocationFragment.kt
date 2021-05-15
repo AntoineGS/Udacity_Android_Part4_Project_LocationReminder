@@ -3,9 +3,11 @@ package com.udacity.project4.locationreminders.savereminder.selectreminderlocati
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.res.Resources
 import android.location.Location
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.databinding.DataBindingUtil
 import com.google.android.gms.location.*
@@ -29,11 +31,15 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private lateinit var map: GoogleMap
     private var marker: Marker? = null
-    private var isLocationPermissionGranted: Boolean = false
+    private var isLocationPermissionGranted: Boolean = true
 
     private val requestLocationPermission =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-            isLocationPermissionGranted = isGranted
+            isLocationPermissionGranted = isGranted and isLocationPermissionGranted
+
+            if (!isGranted) {
+                Toast.makeText(context, R.string.permission_error, Toast.LENGTH_LONG).show()
+            }
         }
 
     override fun onCreateView(
@@ -50,6 +56,7 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
 
         fusedLocationProviderClient =
             LocationServices.getFusedLocationProviderClient(requireActivity());
+
         requestLocationPermission.launch(Manifest.permission.ACCESS_FINE_LOCATION)
         requestLocationPermission.launch(Manifest.permission.ACCESS_BACKGROUND_LOCATION)
 
@@ -90,9 +97,27 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
     override fun onMapReady(p0: GoogleMap?) {
         if (p0 != null) {
             map = p0
+            customizeMapStyle()
             setPoiClick()
             onLocationSelected()
             showMyCurrentLocation()
+        }
+    }
+
+    private fun customizeMapStyle() {
+        try {
+            val success = map.setMapStyle(
+                MapStyleOptions.loadRawResourceStyle(
+                    context,
+                    R.raw.map_style
+                )
+            )
+
+            if (!success) {
+                Toast.makeText(context, R.string.custom_theme_error, Toast.LENGTH_LONG).show()
+            }
+        } catch (e: Resources.NotFoundException) {
+            Toast.makeText(context, R.string.custom_theme_error, Toast.LENGTH_LONG).show()
         }
     }
 

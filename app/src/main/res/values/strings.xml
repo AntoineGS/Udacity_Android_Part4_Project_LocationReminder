@@ -42,4 +42,7 @@
     <string name="geofence_too_many_pending_intents">You have provided too many PendingIntents to the addGeofences() call.</string>
     <string name="error_adding_geofence">Error Happened, Can\'t Add Geofence</string>
     <string name="reminder_details">Reminder Details</string>
+    <string name="custom_theme_error">Unable to apply custom theme</string>
+    <string name="permission_error">Some features will not work without the requested permissions</string>
+    <string name="permission_error_geofence">You need to grant location permission in order to create a geofence</string>
 </resources>

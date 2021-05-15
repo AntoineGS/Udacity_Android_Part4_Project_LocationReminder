@@ -94,4 +94,12 @@ class RemindersListViewModelTest {
         val noRemindersMessage = remindersListViewModel.showSnackBar.getOrAwaitValue()
         assertThat(noRemindersMessage, Matchers.`is`("No reminders found"))
     }
+
+    @Test
+    fun loadReminders_returnErrorTrue_errorShownInToast() = runBlockingTest {
+        fakeDataSource.setReturnError(true)
+        remindersListViewModel.loadReminders()
+        val toastMessage = remindersListViewModel.showSnackBar.getOrAwaitValue()
+        assertThat(toastMessage, Matchers.`is`("Test exception"))
+    }
 }
