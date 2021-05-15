@@ -37,7 +37,7 @@ class RemindersLocalRepositoryTest {
             InstrumentationRegistry.getInstrumentation().context,
             RemindersDatabase::class.java
         ).allowMainThreadQueries()
-         .build()
+            .build()
 
         remindersDAO = remindersDatabase.reminderDao()
         remindersLocalRepository = RemindersLocalRepository(remindersDAO)

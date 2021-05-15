@@ -112,19 +112,25 @@ class RemindersActivityTest :
     }
 
     @Test
-    fun createReminder()  {
+    fun createReminder() {
         val activityScenario = ActivityScenario.launch(RemindersActivity::class.java)
         activityScenario.use {
             Espresso.onView(withId(R.id.noDataTextView))
-                .check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(
-                    ViewMatchers.Visibility.VISIBLE)))
+                .check(
+                    ViewAssertions.matches(
+                        ViewMatchers.withEffectiveVisibility(
+                            ViewMatchers.Visibility.VISIBLE
+                        )
+                    )
+                )
 
             Espresso.onView(withId(R.id.addReminderFAB)).perform(ViewActions.click())
             Espresso.onView(withId(R.id.selectLocation)).perform(ViewActions.click())
 
             Espresso.onView(withId(R.id.save_button)).perform(ViewActions.click())
             Espresso.onView(withId(R.id.reminderTitle)).perform(
-                ViewActions.typeText("Title"))
+                ViewActions.typeText("Title")
+            )
 
             Espresso.onView(withId(R.id.reminderDescription))
                 .perform(ViewActions.typeText("Description"))

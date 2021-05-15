@@ -64,7 +64,8 @@ class SaveReminderViewModelTest {
             "Take out the trash",
             "Home",
             10.00,
-            5.00)
+            5.00
+        )
     }
 
     @Test

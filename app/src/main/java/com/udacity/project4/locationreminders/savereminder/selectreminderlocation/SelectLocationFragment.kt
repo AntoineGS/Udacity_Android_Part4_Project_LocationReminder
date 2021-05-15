@@ -31,10 +31,10 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
     private var marker: Marker? = null
     private var isLocationPermissionGranted: Boolean = false
 
-    private val requestLocationPermission = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
-            isGranted ->
-        isLocationPermissionGranted = isGranted
-    }
+    private val requestLocationPermission =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            isLocationPermissionGranted = isGranted
+        }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -48,8 +48,10 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         setHasOptionsMenu(true)
         setDisplayHomeAsUpEnabled(true)
 
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireActivity());
+        fusedLocationProviderClient =
+            LocationServices.getFusedLocationProviderClient(requireActivity());
         requestLocationPermission.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+        requestLocationPermission.launch(Manifest.permission.ACCESS_BACKGROUND_LOCATION)
 
         return binding.root
     }
@@ -114,7 +116,8 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
             )
 
             _viewModel.reminderSelectedLocationStr.postValue(
-                "%.5f, %.5f".format(latLng.latitude, latLng.longitude))
+                "%.5f, %.5f".format(latLng.latitude, latLng.longitude)
+            )
             _viewModel.latitude.postValue(latLng.latitude)
             _viewModel.longitude.postValue(latLng.longitude)
             _viewModel.navigationCommand.postValue(NavigationCommand.Back)

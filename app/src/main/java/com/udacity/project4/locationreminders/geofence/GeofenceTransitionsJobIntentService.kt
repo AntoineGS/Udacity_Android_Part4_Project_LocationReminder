@@ -21,18 +21,6 @@ class GeofenceTransitionsJobIntentService : JobIntentService(), CoroutineScope {
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.IO + coroutineJob
 
-    companion object {
-        private const val JOB_ID = 573
-
-        fun enqueueWork(context: Context, intent: Intent) {
-            enqueueWork(
-                context,
-                GeofenceTransitionsJobIntentService::class.java, JOB_ID,
-                intent
-            )
-        }
-    }
-
     override fun onHandleWork(intent: Intent) {
         val geofenceEvent = GeofencingEvent.fromIntent(intent)
         if (geofenceEvent.hasError()) {
@@ -59,7 +47,7 @@ class GeofenceTransitionsJobIntentService : JobIntentService(), CoroutineScope {
             }
         }
 
-        if (requestId.isNullOrBlank())  return
+        if (requestId.isNullOrBlank()) return
 
         //Get the local repository instance
         val remindersLocalRepository: RemindersLocalRepository by inject()
@@ -81,6 +69,18 @@ class GeofenceTransitionsJobIntentService : JobIntentService(), CoroutineScope {
                     )
                 )
             }
+        }
+    }
+
+    companion object {
+        private const val JOB_ID = 573
+
+        fun enqueueWork(context: Context, intent: Intent) {
+            enqueueWork(
+                context,
+                GeofenceTransitionsJobIntentService::class.java, JOB_ID,
+                intent
+            )
         }
     }
 
